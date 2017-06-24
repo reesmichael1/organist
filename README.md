@@ -24,4 +24,4 @@ npm start
 
 ## Tests
 
-`npm test` will run the provided suite of unit tests.
+`run-tests.sh` will run the provided suite of unit tests. It automates the process of starting and stopping the PhantomJS server.
