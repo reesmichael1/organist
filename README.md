@@ -4,6 +4,8 @@ An application to manage and schedule weekly repertoire for church organists. It
 
 `Organist` is built with [Electron](http://electron.atom.io), version 1.6.11.
 
+[![CircleCI](https://circleci.com/gh/reesmichael1/organist/tree/master.svg?style=shield)](https://circleci.com/gh/reesmichael1/organist/tree/master)
+
 ## Planned Features
 
 - Generate a PDF of all pieces planned for the upcoming week
