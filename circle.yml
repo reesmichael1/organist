@@ -1,0 +1,4 @@
+test:
+  pre:
+    - phantomjs --webdriver=4444:
+        background: true
