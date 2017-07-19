@@ -1,11 +1,10 @@
 'use strict';
 
-const globalDB = require('./db')();
 const Promise = require('bluebird');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({name: 'dbUtils'});
 
-let getIdForRow = function (tableName, rowJson, db = globalDB) {
+let getIdForRow = function (tableName, rowJson, db) {
     let nameJson = {name: 'getIdForRow'};
     return new Promise(function (resolve, reject) {
         db.initialize();
@@ -38,8 +37,7 @@ let getIdForRow = function (tableName, rowJson, db = globalDB) {
     });
 };
 
-
-let insertComposer = function (first, last, db = globalDB) {
+let insertComposer = function (first, last, db) {
     return new Promise(function (resolve, reject) {
         db.initialize();
 
@@ -48,6 +46,7 @@ let insertComposer = function (first, last, db = globalDB) {
             lastName: last
         }, db).then(function (id) {
             log.info('%s %s has id %d', first, last, id);
+            resolve(id);
         }).catch(function (error) {
             log.error('Failure in dbUtils.insertComposer');
             reject(error);
@@ -55,15 +54,16 @@ let insertComposer = function (first, last, db = globalDB) {
     });
 };
 
-let insertPiece = function (pieceName, compId, db = globalDB) {
+let insertPiece = function (pieceName, compId, db) {
     return new Promise(function (resolve, reject) {
         db.initialize();
 
         getIdForRow('pieces', {
             name: pieceName,
             composerId: compId
-        }).then(function (id) {
+        }, db).then(function (id) {
             log.info('%s has id %d', pieceName, id);
+            resolve(id);
         }).catch(function (error) {
             log.error('Failure in dbUtils.insertPiece');
             reject(error);
@@ -71,13 +71,13 @@ let insertPiece = function (pieceName, compId, db = globalDB) {
     });
 };
 
-let finish = function (db = globalDB) {
+let finish = function (db) {
     db.destroy();
 };
 
 module.exports = {
+    getIdForRow: getIdForRow,
     insertPiece: insertPiece,
     insertComposer: insertComposer,
-    getIdForRow: getIdForRow,
     finish: finish
 };

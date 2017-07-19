@@ -1,11 +1,16 @@
 'use strict';
 
+let globalPath = __dirname + '/../../storage/organist.db';
+
 module.exports = function (DATABASE_LOCATION) {
     let locationString;
     if (DATABASE_LOCATION === 'memory') {
         locationString = ':memory:';
+    } else if (DATABASE_LOCATION === 'global') {
+        locationString = globalPath;
     } else {
-        locationString = 'organist.db';
+        throw new Error('Unknown database storage location '
+            + DATABASE_LOCATION);
     }
 
     let knex = require('knex')({
@@ -26,7 +31,8 @@ module.exports = function (DATABASE_LOCATION) {
         knex.schema.createTableIfNotExists('pieces', function (table) {
                 table.increments();
                 table.string('name');
-                table.integer('composerId').unsigned().references('id').inTable('composers');
+                table.integer('composerId').unsigned()
+                    .references('id').inTable('composers');
         }).then();
     };
 
